@@ -19,7 +19,7 @@
 
 ## 👋 Welcome
 
-Welcome to **Build with Google Antigravity** — a collection of things I've built using <img src="assets/google-antigravity-rainbow.svg" alt="Google Antigravity" height="18" align="center">, from small experiments to full working apps.
+Welcome to **Build with Google Antigravity** — a collection of things I've built using <img src="assets/google-antigravity-rainbow.svg" alt="Google Antigravity" height="18">, from small experiments to full working apps.
 
 This repository also doubles as the resource I use during my live, hands-on sessions — **no slides**, just real prompting, building, and iterating in front of you. Everything I build, prompt, and iterate on lives right here, so you can follow along in real time or revisit it afterwards at your own pace.
 
