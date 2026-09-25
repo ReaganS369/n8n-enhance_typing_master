@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A minimalist pastel Pomodoro focus dashboard with ambient soundscapes, session tasks, and productivity analytics.">
+  <title>Pomodoro Focus Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="focus">
+  <!-- Subtle decorative ambient blobs -->
+  <div class="ambient-blob blob-1" aria-hidden="true"></div>
+  <div class="ambient-blob blob-2" aria-hidden="true"></div>
+
+  <div class="dashboard-wrapper">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span class="brand-title">Pomodoro <span class="brand-badge">Focus</span></span>
+      </div>
+      <div class="header-actions">
+        <button id="soundToggle" class="icon-btn" title="Sound notifications enabled (Click to mute)" aria-label="Toggle sound notification">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+        </button>
+        <button id="themeToggle" class="icon-btn" title="Switch to dark theme" aria-label="Toggle dark and light theme">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <button id="settingsBtn" class="icon-btn" title="Timer Settings" aria-label="Open settings">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Bento Grid Layout -->
+    <main class="dashboard-grid">
+      <!-- Left Column: Session Tasks -->
+      <aside class="dashboard-col col-tasks">
+        <section class="tasks-card" aria-label="Focus Tasks">
+          <div class="tasks-header">
+            <div class="tasks-title-group">
+              <h2 class="tasks-title">Session Tasks</h2>
+              <span id="taskStats" class="task-stats">0 completed</span>
+            </div>
+          </div>
+
+          <!-- Add Task Form -->
+          <form id="addTaskForm" class="add-task-form">
+            <input
+              type="text"
+              id="taskInput"
+              class="task-input"
+              placeholder="Add task to focus on..."
+              autocomplete="off"
+              maxlength="100"
+              aria-label="New task name"
+            />
+            <button type="submit" id="addTaskBtn" class="add-task-btn" aria-label="Add task" title="Add task">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </form>
+
+          <!-- Task List -->
+          <ul id="taskList" class="task-list" role="list">
+            <!-- Dynamically populated via app.js -->
+          </ul>
+
+          <div id="emptyTasks" class="empty-tasks">
+            <span>No tasks yet. Add one and pin it to focus!</span>
+          </div>
+        </section>
+      </aside>
+
+      <!-- Center Column: Focus Timer Stage -->
+      <section class="dashboard-col col-timer">
+        <!-- Mode Selector Tabs -->
+        <nav class="mode-tabs" role="tablist" aria-label="Timer Modes">
+          <button id="tab-focus" class="tab-btn active" role="tab" aria-selected="true" aria-controls="timerPanel" data-mode="focus">
+            Focus
+          </button>
+          <button id="tab-shortBreak" class="tab-btn" role="tab" aria-selected="false" aria-controls="timerPanel" data-mode="shortBreak">
+            Short Break
+          </button>
+          <button id="tab-longBreak" class="tab-btn" role="tab" aria-selected="false" aria-controls="timerPanel" data-mode="longBreak">
+            Long Break
+          </button>
+        </nav>
+
+        <!-- Clock Timer Dial & Display -->
+        <div id="timerPanel" class="clock-card" role="tabpanel" aria-labelledby="tab-focus" aria-label="Timer Clock">
+          <div class="ring-wrapper">
+            <svg class="progress-ring" viewBox="0 0 320 320" aria-hidden="true">
+              <circle
+                class="progress-ring__track"
+                cx="160"
+                cy="160"
+                r="136"
+              />
+              <circle
+                id="progressRing"
+                class="progress-ring__circle"
+                cx="160"
+                cy="160"
+                r="136"
+              />
+            </svg>
+
+            <div class="time-content">
+              <div id="modeLabel" class="mode-label">Focus Session</div>
+              <div id="timeDisplay" class="time-display" role="timer">25:00</div>
+              <div id="statusHint" class="status-hint" aria-live="polite" aria-atomic="true">Ready to focus</div>
+            </div>
+          </div>
+
+          <!-- Active Task Spotlight Banner -->
+          <div id="activeTaskSpotlight" class="active-task-spotlight hidden">
+            <div class="spotlight-content">
+              <span class="spotlight-pill">🎯 Focus Target</span>
+              <span id="spotlightTaskText" class="spotlight-text">Task Name</span>
+            </div>
+            <button id="clearSpotlightBtn" class="spotlight-clear-btn" title="Unpin active task" aria-label="Unpin active task">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Controls -->
+          <div class="controls-bar">
+            <button id="startPauseBtn" class="btn btn-primary" aria-label="Start Timer">
+              <svg id="playIcon" class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <svg id="pauseIcon" class="btn-icon hidden" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="6" y="4" width="4" height="16" rx="1"></rect>
+                <rect x="14" y="4" width="4" height="16" rx="1"></rect>
+              </svg>
+              <span id="startPauseText">Start</span>
+            </button>
+
+            <button id="resetBtn" class="btn btn-secondary" aria-label="Reset Timer" title="Reset (R)">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+              </svg>
+              <span>Reset</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Keyboard shortcuts helper note -->
+        <footer class="app-footer">
+          <span class="hint-pill"><kbd>Space</kbd> Start / Pause</span>
+          <span class="hint-pill"><kbd>R</kbd> Reset</span>
+        </footer>
+      </section>
+
+      <!-- Right Column: Analytics & Soundscape -->
+      <aside class="dashboard-col col-side">
+        <!-- Analytics Widget Card -->
+        <section class="dashboard-widget analytics-card" aria-label="Productivity Analytics">
+          <div class="widget-header">
+            <div class="widget-title-group">
+              <svg class="widget-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+              <h2 class="widget-title">Activity</h2>
+            </div>
+            <span id="streakBadge" class="streak-badge" title="Consecutive daily focus streak">🔥 0 days</span>
+          </div>
+
+          <div class="analytics-metrics">
+            <div class="metric-chip">
+              <span class="metric-value" id="todayFocusTime">0m</span>
+              <span class="metric-label">Focused Today</span>
+            </div>
+            <div class="metric-chip">
+              <span class="metric-value" id="todaySessions">0</span>
+              <span class="metric-label">Sessions Done</span>
+            </div>
+          </div>
+
+          <!-- 7-Day Mini Bar Chart -->
+          <div class="chart-wrapper">
+            <div class="chart-header">
+              <span class="chart-sub">Last 7 Days</span>
+              <span class="chart-hint" id="weeklyTotalHint">0h total</span>
+            </div>
+            <div class="bar-chart" id="weeklyBarChart">
+              <!-- Dynamically generated bars via app.js -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Ambient Soundscape Widget Card -->
+        <section class="dashboard-widget soundscape-card" aria-label="Ambient Focus Soundscapes">
+          <div class="widget-header">
+            <div class="widget-title-group">
+              <svg class="widget-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+              </svg>
+              <h2 class="widget-title">Soundscape</h2>
+            </div>
+            <button id="muteAllSoundsBtn" class="sound-all-btn" title="Stop all ambient sounds">Stop All</button>
+          </div>
+
+          <div class="sound-channels">
+            <!-- Rain -->
+            <div class="sound-channel" data-sound="rain">
+              <div class="channel-info">
+                <span class="channel-icon">🌧️</span>
+                <span class="channel-name">Rain</span>
+                <button class="channel-toggle" aria-label="Toggle Rain sound" data-sound="rain">Play</button>
+              </div>
+              <div class="channel-slider-wrapper">
+                <input type="range" class="channel-slider" min="0" max="100" value="50" data-sound="rain" aria-label="Rain volume" />
+              </div>
+            </div>
+
+            <!-- Waves -->
+            <div class="sound-channel" data-sound="waves">
+              <div class="channel-info">
+                <span class="channel-icon">🌊</span>
+                <span class="channel-name">Ocean Waves</span>
+                <button class="channel-toggle" aria-label="Toggle Waves sound" data-sound="waves">Play</button>
+              </div>
+              <div class="channel-slider-wrapper">
+                <input type="range" class="channel-slider" min="0" max="100" value="40" data-sound="waves" aria-label="Ocean Waves volume" />
+              </div>
+            </div>
+
+            <!-- Wind -->
+            <div class="sound-channel" data-sound="wind">
+              <div class="channel-info">
+                <span class="channel-icon">🍃</span>
+                <span class="channel-name">Gentle Wind</span>
+                <button class="channel-toggle" aria-label="Toggle Wind sound" data-sound="wind">Play</button>
+              </div>
+              <div class="channel-slider-wrapper">
+                <input type="range" class="channel-slider" min="0" max="100" value="35" data-sound="wind" aria-label="Gentle Wind volume" />
+              </div>
+            </div>
+
+            <!-- Brown Noise -->
+            <div class="sound-channel" data-sound="brown">
+              <div class="channel-info">
+                <span class="channel-icon">☕</span>
+                <span class="channel-name">Brown Noise</span>
+                <button class="channel-toggle" aria-label="Toggle Brown noise" data-sound="brown">Play</button>
+              </div>
+              <div class="channel-slider-wrapper">
+                <input type="range" class="channel-slider" min="0" max="100" value="40" data-sound="brown" aria-label="Brown noise volume" />
+              </div>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Settings Modal Dialog -->
+  <div id="settingsModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="settingsTitle" class="modal-title">Timer Settings</h2>
+        <button id="closeSettingsBtn" class="modal-close-btn" aria-label="Close settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <form id="settingsForm" class="settings-form">
+        <div class="settings-group">
+          <h3 class="settings-group-title">Session Durations (minutes)</h3>
+          <div class="settings-row">
+            <label for="focusDuration">Focus Session</label>
+            <input type="number" id="focusDuration" min="1" max="120" value="25" />
+          </div>
+          <div class="settings-row">
+            <label for="shortBreakDuration">Short Break</label>
+            <input type="number" id="shortBreakDuration" min="1" max="60" value="5" />
+          </div>
+          <div class="settings-row">
+            <label for="longBreakDuration">Long Break</label>
+            <input type="number" id="longBreakDuration" min="1" max="90" value="15" />
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h3 class="settings-group-title">Automation</h3>
+          <div class="settings-toggle-row">
+            <span class="toggle-label">Auto-start Breaks</span>
+            <label class="switch">
+              <input type="checkbox" id="autoStartBreaks" />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <div class="settings-toggle-row">
+            <span class="toggle-label">Auto-start Pomodoros</span>
+            <label class="switch">
+              <input type="checkbox" id="autoStartFocus" />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="resetDefaultsBtn" class="btn btn-secondary">Defaults</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

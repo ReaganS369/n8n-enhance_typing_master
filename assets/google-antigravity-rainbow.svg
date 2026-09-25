@@ -1,0 +1,14 @@
+<svg width="230" height="26" viewBox="0 0 230 26" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Google Antigravity">
+  <defs>
+    <linearGradient id="rainbow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff0000"/>
+      <stop offset="16%" stop-color="#ff9900"/>
+      <stop offset="33%" stop-color="#ffee00"/>
+      <stop offset="50%" stop-color="#33cc33"/>
+      <stop offset="66%" stop-color="#0099ff"/>
+      <stop offset="83%" stop-color="#6633ff"/>
+      <stop offset="100%" stop-color="#ff00cc"/>
+    </linearGradient>
+  </defs>
+  <text x="0" y="19" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="url(#rainbow)">Google Antigravity</text>
+</svg>
