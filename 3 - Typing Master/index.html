@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TYPE//TANK — Modern Kinetic Defense</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Arcade Cabinet Shell -->
+  <main class="cabinet-wrapper aspect-auto" id="arcade-cabinet">
+    
+    <!-- Top Marquee / Header HUD Bar -->
+    <header class="cabinet-header">
+      <div class="logo-area">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        <div class="logo-title">TYPE<span style="color: var(--cyan-primary);">//</span>TANK</div>
+        <div class="logo-subtitle">MODERN DEFENSE</div>
+      </div>
+
+      <!-- Operator HUD Badge -->
+      <div class="operator-badge">
+        <span class="operator-label">OPERATOR:</span>
+        <span class="operator-callsign" id="hud-callsign">CYBER-01</span>
+        <button class="btn-icon-switch" id="btn-switch-callsign" title="Switch Operator Callsign">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Controls & Toggles -->
+      <div class="header-actions">
+        <!-- Theme Selector -->
+        <div class="theme-selector-wrap" title="Visual Style Theme">
+          <button class="btn-theme-pill active" data-theme="cyber-neon">⚡ NEON</button>
+          <button class="btn-theme-pill" data-theme="zen-emerald">🌿 ZEN</button>
+          <button class="btn-theme-pill" data-theme="solar-sunset">🌅 SUNSET</button>
+          <button class="btn-theme-pill" data-theme="oled-frost">❄️ FROST</button>
+        </div>
+
+        <!-- Aspect Ratio Controls -->
+        <div class="aspect-controls" title="Screen Aspect Ratio">
+          <button class="btn-hud-tool active" id="btn-aspect-auto">AUTO</button>
+          <button class="btn-hud-tool" id="btn-aspect-169">16:9</button>
+          <button class="btn-hud-tool" id="btn-aspect-43">4:3</button>
+        </div>
+
+        <!-- CRT Scanline Toggle -->
+        <button class="btn-hud-pill" id="btn-toggle-crt" title="Toggle Vintage CRT Filter">CRT: OFF</button>
+
+        <!-- Audio Mute Toggle -->
+        <button class="btn-hud-pill" id="btn-toggle-mute" title="Toggle Procedural Audio">AUDIO: ON</button>
+      </div>
+    </header>
+
+    <!-- Main Screens Container -->
+    <div class="cabinet-body">
+      
+      <!-- ===================================================================
+           1. LOGIN SCREEN (OPERATOR AUTHENTICATION)
+           =================================================================== -->
+      <section class="screen" id="screen-login">
+        <div class="screen-card-panel login-box">
+          <svg class="login-hero-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+
+          <div>
+            <h2 class="panel-title" style="justify-content: center;">OPERATOR AUTHENTICATION</h2>
+            <p class="login-desc" style="margin-top: 6px;">
+              Enter your defense callsign to initialize turret target systems and log combat sortie telemetry.
+            </p>
+          </div>
+
+          <div class="terminal-input-wrap">
+            <span class="terminal-prompt-prefix">CALLSIGN&gt;</span>
+            <input type="text" id="input-callsign" class="terminal-input" placeholder="CYBER-01" maxlength="16" autofocus spellcheck="false" autocomplete="off">
+          </div>
+
+          <div style="display: flex; gap: 12px; width: 100%;">
+            <button class="btn-primary-glow" id="btn-quick-play" style="flex: 1.2; background: linear-gradient(135deg, #00ff88, #00f0ff);">
+              <span>⚡ QUICK PLAY NOW</span>
+            </button>
+            <button class="btn-secondary-ghost" id="btn-login-submit" style="flex: 1;">
+              <span>CONFIG &gt;</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           2. SETTINGS / ARSENAL CONFIGURATION SCREEN
+           =================================================================== -->
+      <section class="screen hidden" id="screen-settings">
+        <div class="screen-card-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              <span>ARSENAL & DISPLAY CONFIGURATION</span>
+            </h2>
+            <span class="panel-tag">COMBAT PROFILE</span>
+          </div>
+
+          <!-- Mission Objective Selection (Game Modes) -->
+          <div class="settings-subheading">1. SELECT GAME MODE (2 DEDICATED MODES)</div>
+          <div class="objective-grid">
+            <div class="objective-card selected" data-obj="tank">
+              <div class="obj-icon">🛡️</div>
+              <div class="obj-title">TURRET DEFENSE</div>
+              <div class="obj-desc">Kinetic 180° Dome Railgun. Words descend from orbit; auto lowest-first tracking locks on and shoots bolts before defense line is breached!</div>
+            </div>
+
+            <div class="objective-card" data-obj="car">
+              <div class="obj-icon">🏎️</div>
+              <div class="obj-title">HIGHWAY LANE RUNNER</div>
+              <div class="obj-desc">3-Lane Highway Dodge & Drift! Words drop down specific lanes. Type the word in your lane to swerve and dodge—or crash head-on into it!</div>
+            </div>
+          </div>
+
+          <!-- Character Arsenal Selection -->
+          <div class="settings-subheading">2. SELECT ARSENAL CHARACTER SET</div>
+
+          <!-- Mode Cards Quad -->
+          <div class="mode-grid">
+            <div class="mode-card selected" data-mode="1">
+              <div class="mode-card-badge">MODE 1</div>
+              <div class="mode-card-title">ALPHA</div>
+              <div class="mode-card-desc">Standard Lowercase vocabulary. High-speed defensive targeting.</div>
+            </div>
+
+            <div class="mode-card" data-mode="2">
+              <div class="mode-card-badge">MODE 2</div>
+              <div class="mode-card-title">BRAVO</div>
+              <div class="mode-card-desc">Mixed Case (Lower + Upper). Sharp shift-key tactical reaction.</div>
+            </div>
+
+            <div class="mode-card" data-mode="3">
+              <div class="mode-card-badge">MODE 3</div>
+              <div class="mode-card-title">CHARLIE</div>
+              <div class="mode-card-desc">Alphanumeric (Letters + Numbers). Code sequences and callouts.</div>
+            </div>
+
+            <div class="mode-card" data-mode="4">
+              <div class="mode-card-badge">MODE 4</div>
+              <div class="mode-card-title">DELTA</div>
+              <div class="mode-card-desc">Special Characters, brackets & math expressions. Apex mastery.</div>
+            </div>
+          </div>
+
+          <!-- Granular Character Matrix Toggles -->
+          <div class="matrix-toggles">
+            <label class="matrix-label" style="opacity: 0.7; cursor: not-allowed;">
+              <input type="checkbox" checked disabled>
+              <span>LOWERCASE [PERMANENT]</span>
+            </label>
+
+            <label class="matrix-label">
+              <input type="checkbox" id="chk-uppercase">
+              <span>UPPERCASE LETTERS</span>
+            </label>
+
+            <label class="matrix-label">
+              <input type="checkbox" id="chk-numbers">
+              <span>NUMERIC DIGITS (0-9)</span>
+            </label>
+
+            <label class="matrix-label">
+              <input type="checkbox" id="chk-specials">
+              <span>SPECIAL SYMBOLS & BRACKETS</span>
+            </label>
+          </div>
+
+          <!-- Live Words Preview Bar -->
+          <div class="preview-bar">
+            <div class="preview-bar-title">CURRENT ARSENAL SAMPLE THREATS:</div>
+            <div class="preview-chips-wrap" id="preview-words-list">
+              <!-- Dynamically populated sample chips -->
+            </div>
+          </div>
+
+          <!-- Footer Actions -->
+          <div class="panel-footer-actions">
+            <button class="btn-secondary-ghost" id="btn-settings-back">LOGOUT / SWITCH</button>
+            <button class="btn-primary-glow" id="btn-settings-start">
+              <span>TACTICAL BRIEFING</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           3. INSTRUCTIONS / BRIEFING SCREEN
+           =================================================================== -->
+      <section class="screen hidden" id="screen-instructions">
+        <div class="screen-card-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              <span>COMBAT DIRECTIVE & BRIEFING</span>
+            </h2>
+            <span class="panel-tag">STANDBY READY</span>
+          </div>
+
+          <!-- 2-Column Tactical Directives Grid -->
+          <div class="briefing-grid">
+            <div class="briefing-card">
+              <svg class="briefing-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="22" y1="12" x2="18" y2="12"></line>
+                <line x1="6" y1="12" x2="2" y2="12"></line>
+                <line x1="12" y1="6" x2="12" y2="2"></line>
+                <line x1="12" y1="22" x2="12" y2="18"></line>
+              </svg>
+              <div class="briefing-content">
+                <h4>AUTOMATIC TARGET LOCK</h4>
+                <p>
+                  Press the matching character to fire. In <strong>Turret Defense</strong>, railgun locks onto the lowest threat first. In <strong>Highway Runner</strong>, priority locks onto the obstacle in your direct lane!
+                </p>
+              </div>
+            </div>
+
+            <div class="briefing-card">
+              <svg class="briefing-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <div class="briefing-content">
+                <h4>3-LANE SWERVE & DODGE</h4>
+                <p>
+                  In Highway Runner, words drop down 3 lanes. Correctly typing an obstacle in your path commands your supercar to <strong>swerve & drift</strong> into a clear lane! If you don't type it in time, you crash!
+                </p>
+              </div>
+            </div>
+
+            <div class="briefing-card">
+              <svg class="briefing-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+              <div class="briefing-content">
+                <h4>STRICT CASE-SENSITIVITY</h4>
+                <p>
+                  Exact capitalization is enforced. In Bravo & Charlie modes, <strong>UPPERCASE requires Shift/Caps Lock</strong>. Mismatched case resets your combo multiplier.
+                </p>
+              </div>
+            </div>
+
+            <div class="briefing-card">
+              <svg class="briefing-icon danger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <div class="briefing-content">
+                <h4>HULL INTEGRITY & CRASHES</h4>
+                <p>
+                  Perimeter breaches in Turret mode or direct lane collisions in Runner mode inflict <strong>20-35% Hull Damage</strong>. Crimson bonus hazards award a massive <strong class="danger">3.5× Multiplier</strong>!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hotkey Quick Reference -->
+          <div class="hotkey-cheat-strip">
+            <div class="hotkey-item"><kbd>SPACE</kbd> or <kbd>ENTER</kbd> Engage / Confirm</div>
+            <div class="hotkey-item"><kbd>ESC</kbd> Tactical Pause</div>
+            <div class="hotkey-item"><kbd>R</kbd> Flight Logs (On Result)</div>
+          </div>
+
+          <!-- Footer Actions -->
+          <div class="panel-footer-actions">
+            <button class="btn-secondary-ghost" id="btn-instructions-back">SETTINGS</button>
+            <button class="btn-primary-glow" id="btn-engage-game">
+              <span>ENGAGE SORTIE [SPACE]</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           4. IN-GAME ARENA & CANVAS HUD
+           =================================================================== -->
+      <section class="screen hidden" id="screen-game">
+        <div class="game-arena-wrapper">
+          
+          <!-- In-Game Stats HUD Bar -->
+          <div class="in-game-hud-bar">
+            <!-- Left: Score & Mode -->
+            <div class="hud-stat-group">
+              <div class="hud-metric">
+                <span class="metric-label">SCORE</span>
+                <span class="metric-val score" id="game-hud-score">000000</span>
+              </div>
+              <div class="hud-metric">
+                <span class="metric-label">OBJECTIVE</span>
+                <span class="mode-tag-pill" id="game-hud-objective-badge">DEFENSE</span>
+              </div>
+              <div class="hud-metric">
+                <span class="metric-label">ARSENAL</span>
+                <span class="mode-tag-pill" id="game-hud-mode-badge">MODE 1</span>
+              </div>
+            </div>
+
+            <!-- Center: Hull Integrity -->
+            <div class="health-meter-wrap">
+              <div style="display: flex; justify-content: space-between; font-size: 10px;">
+                <span class="metric-label">HULL INTEGRITY</span>
+                <span id="game-hud-health-val" style="font-weight: 700; color: #fff;">100%</span>
+              </div>
+              <div class="health-bar-track">
+                <div class="health-bar-fill" id="game-hud-health-fill"></div>
+              </div>
+            </div>
+
+            <!-- Right: WPM, Accuracy & Combo -->
+            <div class="hud-stat-group">
+              <div class="hud-metric">
+                <span class="metric-label">WPM</span>
+                <span class="metric-val" id="game-hud-wpm">0</span>
+              </div>
+              <div class="hud-metric">
+                <span class="metric-label">ACCURACY</span>
+                <span class="metric-val" id="game-hud-acc">100%</span>
+              </div>
+              <div class="combo-badge">
+                <span class="metric-label" style="display:block;">COMBO</span>
+                <span class="combo-val" id="game-hud-combo">0X</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive 2D Canvas Arena -->
+          <div class="canvas-container">
+            <canvas id="game-canvas"></canvas>
+
+            <!-- In-Game Tactical Pause Modal -->
+            <div class="modal-overlay hidden" id="modal-pause">
+              <div class="modal-dialog">
+                <h3 class="panel-title" style="justify-content: center;">TACTICAL PAUSE</h3>
+                <p style="color: var(--text-dim); font-size: 13px;">Defense systems in holding pattern.</p>
+                <div style="display: flex; gap: 12px; justify-content: center; margin-top: 10px;">
+                  <button class="btn-primary-glow" id="btn-resume">RESUME SORTIE</button>
+                  <button class="btn-secondary-ghost" id="btn-abort">ABORT SORTIE</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           5. RESULT SCREEN (SORTIE DEBRIEF)
+           =================================================================== -->
+      <section class="screen hidden" id="screen-result">
+        <div class="screen-card-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span>SORTIE DEBRIEFING</span>
+            </h2>
+            <span class="mode-tag-pill" id="result-mode-badge">MODE 1</span>
+          </div>
+
+          <!-- Record Banner (Triggered if new PB achieved) -->
+          <div class="record-banner hidden" id="result-record-banner">
+            <div class="record-banner-text">★ NEW PERSONAL RECORD ACHIEVED! ★</div>
+          </div>
+
+          <!-- Key Debrief Metrics Grid -->
+          <div class="result-metrics-grid">
+            <div class="result-metric-card highlight">
+              <div class="metric-label">FINAL SCORE</div>
+              <div class="result-card-val hero" id="result-score">0</div>
+              <div class="delta-msg" id="result-delta-msg" style="margin-top: 4px;"></div>
+            </div>
+
+            <div class="result-metric-card">
+              <div class="metric-label">AVERAGE WPM</div>
+              <div class="result-card-val" id="result-wpm">0</div>
+            </div>
+
+            <div class="result-metric-card">
+              <div class="metric-label">ACCURACY</div>
+              <div class="result-card-val" id="result-acc">100%</div>
+            </div>
+
+            <div class="result-metric-card">
+              <div class="metric-label">TARGETS NEUTRALIZED</div>
+              <div class="result-card-val" id="result-words">0</div>
+            </div>
+
+            <div class="result-metric-card">
+              <div class="metric-label">PEAK COMBO</div>
+              <div class="result-card-val" id="result-combo">0x</div>
+            </div>
+
+            <div class="result-metric-card" style="display: flex; flex-direction: column; justify-content: center;">
+              <div class="metric-label">KEYBOARD SHORTCUT</div>
+              <div style="margin-top: 4px; font-size: 11px; color: var(--text-dim);">
+                <kbd>ENTER</kbd> Replay &nbsp; <kbd>R</kbd> Records
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer Actions -->
+          <div class="panel-footer-actions">
+            <div style="display: flex; gap: 10px;">
+              <button class="btn-secondary-ghost" id="btn-result-settings">SETTINGS</button>
+              <button class="btn-secondary-ghost" id="btn-result-records">FLIGHT LOGS [R]</button>
+            </div>
+            <button class="btn-primary-glow" id="btn-result-play-again">
+              <span>REDEPLOY [ENTER]</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           6. MY RECORDS / PERFORMANCE FLIGHT LOGS
+           =================================================================== -->
+      <section class="screen hidden" id="screen-records">
+        <div class="screen-card-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+              </svg>
+              <span>OPERATOR FLIGHT LOGS & HISTORY</span>
+            </h2>
+            <button class="btn-secondary-ghost" id="btn-clear-logs" style="font-size: 11px; padding: 4px 8px; color: var(--neon-pink);">PURGE LOGS</button>
+          </div>
+
+          <!-- Lifetime Overview -->
+          <div class="lifetime-stats-grid">
+            <div class="lifetime-stat-box">
+              <div class="metric-label">TOTAL SORTIES</div>
+              <div class="result-card-val" id="stat-lifetime-sorties">0</div>
+            </div>
+            <div class="lifetime-stat-box">
+              <div class="metric-label">WORDS NEUTRALIZED</div>
+              <div class="result-card-val" id="stat-lifetime-words">0</div>
+            </div>
+            <div class="lifetime-stat-box">
+              <div class="metric-label">PEAK WPM</div>
+              <div class="result-card-val" id="stat-lifetime-peak-wpm">0</div>
+            </div>
+            <div class="lifetime-stat-box">
+              <div class="metric-label">PEAK SCORE</div>
+              <div class="result-card-val" id="stat-lifetime-peak-score" style="color: var(--cyan-primary);">0</div>
+            </div>
+          </div>
+
+          <!-- Mode Bests Quad -->
+          <div class="mode-quad-grid" id="quad-mode-bests">
+            <!-- Dynamically populated Mode PB cards -->
+          </div>
+
+          <!-- Filter Tabs -->
+          <div class="filter-bar">
+            <button class="filter-tab active" data-filter="all">ALL SORTIES</button>
+            <button class="filter-tab" data-filter="1">MODE 1 (ALPHA)</button>
+            <button class="filter-tab" data-filter="2">MODE 2 (BRAVO)</button>
+            <button class="filter-tab" data-filter="3">MODE 3 (CHARLIE)</button>
+            <button class="filter-tab" data-filter="4">MODE 4 (DELTA)</button>
+          </div>
+
+          <!-- Filterable Logs Table -->
+          <div class="table-scroll-wrap">
+            <table class="flight-table">
+              <thead>
+                <tr>
+                  <th>TIME</th>
+                  <th>MODE</th>
+                  <th>SCORE</th>
+                  <th>WPM</th>
+                  <th>ACCURACY</th>
+                  <th>COMBO</th>
+                  <th>TARGETS</th>
+                </tr>
+              </thead>
+              <tbody id="records-table-body">
+                <!-- Records injected here -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Footer Actions -->
+          <div class="panel-footer-actions">
+            <button class="btn-secondary-ghost" id="btn-records-back">BACK TO SETTINGS</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Confetti Canvas for Record Celebration -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Scripts -->
+  <script src="js/words.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
